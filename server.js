@@ -1,47 +1,34 @@
-// server.js
-// where your node app starts
-
-// init project
-var express = require('express');
+var express = require("express");
 var app = express();
-
-var Flickr = require("flickrapi"),
-    flickrOptions = {
-      api_key: "3f11af9dc39e75e0951ab8119acb7e93",
-      secret: "62f5a82074f074cf"
-    };
- 
-
-// we've started you off with Express, 
-// but feel free to use whatever libs or frameworks you'd like through `package.json`.
-
-// http://expressjs.com/en/starter/static-files.html
-app.use(express.static('public'));
-
-// http://expressjs.com/en/starter/basic-routing.html
-app.get("/", function (request, response) {
-  response.sendFile(__dirname + '/views/index.html');
+//var mongo = require("mongodb").MongoClient;
+var dbUrl = 'mongodb://amk:W4UY|c-_hyJc7nJ@ds013222.mlab.com:13222/shorten_url';
+var port = process.env.PORT || 8080;
+var imgSearch = require("google-images");
+var apiKey = 'AIzaSyCj6zGCOthX__AzcGDENssx-5-I5W3XR8c';
+var cseId = '009398540246307978289:iqst39d97we';
+var client = new imgSearch(cseId,apiKey);
+app.get('/api/imgSearch/:name',function(req,res){
+    var page = req.query.offset ? req.query.offset : 1;
+    var imgName = req.params.name;
+    var date =new Date().toISOString();
+    // console.log(date);
+    client.search(imgName,{
+        page: page
+    }).then(function(images){
+        if(images.length>0){
+            
+        } else {
+            res.json('wtf');
+        }
+    });
 });
-
-app.get("/api/imagesearch/:query", function (request, response) {
-  var keyword = request.params["query"];
-  var offset = request.query.offset;
-  Flickr.authenticate(flickrOptions, function(error, flickr) {
-  flickr.photos.search({
-  user_id: flickr.options.user_id,
-  page: 1,
-  per_page: 50,
-  text: keyword
-}, function(err, result) {
-  console.log(result);
+app.get('/api/latest/imgsearch',function(req,res){
+   
 });
+app.get('/',express.static('public'));
+app.get('*',function(req,res){
+    res.send(req.headers);
 });
-
-  response.send(keyword + " " + offset);
-});
-
-
-// listen for requests :)
-var listener = app.listen(process.env.PORT, function () {
-  console.log('Your app is listening on port ' + listener.address().port);
+app.listen(port,function(){
+    console.log('Everything is OK :)');
 });
