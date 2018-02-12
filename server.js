@@ -33,7 +33,7 @@ app.get("/api/imagesearch/:query", function (request, response) {
   per_page: 50,
   text: keyword
 }, function(err, result) {
-  // result is Flickr's response
+  console.log(result);
 });
 });
 
