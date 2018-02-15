@@ -5,10 +5,11 @@
 var express = require('express');
 var app = express();
 
-var google = require('googleapis');
+var {google} = require('googleapis');
 var customsearch = google.customsearch('v1');
-var nconf = require('nconf');
-var path = require('path');
+var CX = '007483715269021992219:tsmgvdhde94';
+var API_KEY = 'AIzaSyBG5wSjljgM7qNPmsTLtKptf36Cz2WvtwU';
+
 
 
 // we've started you off with Express, 
