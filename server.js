@@ -11,7 +11,10 @@ var GoogleImages = require('google-images');
 var CX = '007483715269021992219:tsmgvdhde94';
 var API_KEY = 'AIzaSyBG5wSjljgM7qNPmsTLtKptf36Cz2WvtwU';
 
-
+const {google} = require('googleapis');
+const customsearch = google.customsearch('v1');
+const nconf = require('nconf');
+const path = require('path');
 
 // we've started you off with Express, 
 // but feel free to use whatever libs or frameworks you'd like through `package.json`.
@@ -28,12 +31,12 @@ app.get("/api/imagesearch/:query", function (request, response) {
   var keyword = request.params["query"];
   var offset = request.query.offset;
   
-  var client = new GoogleImages(CX, API_KEY);
+  //var client = new GoogleImages(CX, API_KEY);
   
-  client.search( keyword, function (err, images) {
+  //client.search( keyword, function (err, images) {
     //console.log(images)
-    response.end(images);
-});
+  //  response.end(images);
+//});
   
 //  var googleSearch = new GoogleSearch({
 //  key: API_KEY,
@@ -48,6 +51,21 @@ app.get("/api/imagesearch/:query", function (request, response) {
 //  response.send(result);
 //});
 
+  customsearch.cse.list({
+  q: keyword,
+  auth: API_KEY,
+  cx: CX
+}, (err, res) => {
+  if (err) {
+    throw err;
+  }
+  // Got the response from custom search
+  console.log('Result: ' + res.searchInformation.formattedTotalResults);
+  if (res.items && res.items.length > 0) {
+    console.log('First result name is ' + res.items[0].title);
+  }
+});
+  
   
 });
 
