@@ -31,13 +31,14 @@ app.get("/api/imagesearch/:query", function (request, response) {
   var client = new GoogleImages(CX, API_KEY);
   
   client.search( keyword, function (err, images) {
-    console.log(images)
+    //console.log(images)
+    response.end(images);
 });
   
-  var googleSearch = new GoogleSearch({
-  key: API_KEY,
-  cx: CX
-});
+//  var googleSearch = new GoogleSearch({
+//  key: API_KEY,
+ // cx: CX
+//});
   
 //  googleSearch.build({
 //  q: keyword,
