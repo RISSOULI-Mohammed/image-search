@@ -11,10 +11,8 @@ var GoogleImages = require('google-images');
 var CX = '007483715269021992219:tsmgvdhde94';
 var API_KEY = 'AIzaSyBG5wSjljgM7qNPmsTLtKptf36Cz2WvtwU';
 
-const {google} = require('googleapis');
-const customsearch = google.customsearch('v1');
-const nconf = require('nconf');
-const path = require('path');
+var {google} = require('googleapis');
+
 
 // we've started you off with Express, 
 // but feel free to use whatever libs or frameworks you'd like through `package.json`.
@@ -42,29 +40,18 @@ app.get("/api/imagesearch/:query", function (request, response) {
 //  key: API_KEY,
  // cx: CX
 //});
+  var customsearch = google.customsearch('v1');
   
-//  googleSearch.build({
-//  q: keyword,
-//  start: 1,
-//  num: 10
-//}, function(error, result) {
-//  response.send(result);
-//});
-
   customsearch.cse.list({
-  q: keyword,
+  cx: CX,
   auth: API_KEY,
-  cx: CX
-}, (err, res) => {
-  if (err) {
-    throw err;
-  }
-  // Got the response from custom search
-  console.log('Result: ' + res.searchInformation.formattedTotalResults);
-  if (res.items && res.items.length > 0) {
-    console.log('First result name is ' + res.items[0].title);
-  }
+  q: keyword,
+  start: 1,
+  num: 10
+}, function(error, result) {
+  response.end('Result: ' + result.searchInformation.formattedTotalResults);
 });
+
   
   
 });
