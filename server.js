@@ -5,8 +5,8 @@
 var express = require('express');
 var app = express();
 
-var {google} = require('googleapis');
-var customsearch = google.customsearch('v1');
+var GoogleSearch = require('google-search');
+
 var CX = '007483715269021992219:tsmgvdhde94';
 var API_KEY = 'AIzaSyBG5wSjljgM7qNPmsTLtKptf36Cz2WvtwU';
 
@@ -26,7 +26,17 @@ app.get("/", function (request, response) {
 app.get("/api/imagesearch/:query", function (request, response) {
   var keyword = request.params["query"];
   var offset = request.query.offset;
-
+  
+  customsearch.cse.list({
+  cx: CX,
+  q: keyword,
+  auth: API_KEY
+}, (err, res) => {
+  if (err) {
+    throw err;
+  }
+  console.log(JSON.stringify(res.searchInformation));
+});
 
   response.send(keyword + " " + offset);
 });
