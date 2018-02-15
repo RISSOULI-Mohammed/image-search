@@ -27,18 +27,20 @@ app.get("/api/imagesearch/:query", function (request, response) {
   var keyword = request.params["query"];
   var offset = request.query.offset;
   
-  customsearch.cse.list({
-  cx: CX,
+  var googleSearch = new GoogleSearch({
+  key: API_KEY,
+  cx: CX
+});
+  
+  googleSearch.build({
   q: keyword,
-  auth: API_KEY
-}, (err, res) => {
-  if (err) {
-    throw err;
-  }
-  console.log(JSON.stringify(res.searchInformation));
+  start: 1,
+  num: 10
+}, function(error, result) {
+  response.send(result);
 });
 
-  response.send(keyword + " " + offset);
+  
 });
 
 
