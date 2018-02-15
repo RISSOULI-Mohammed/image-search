@@ -46,10 +46,10 @@ app.get("/api/imagesearch/:query", function (request, response) {
   cx: CX,
   auth: API_KEY,
   q: keyword,
-  start: 1,
-  num: 10
+
 }, function(error, result) {
-  response.end('Result: ' + result.searchInformation.formattedTotalResults);
+    if(error) console.log(error);
+  response.end('Result: ' + result.items);
 });
 
   
