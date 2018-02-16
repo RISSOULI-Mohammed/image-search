@@ -5,7 +5,7 @@
 var express = require('express');
 var app = express();
 
-var Search = require('bing.search');
+var request = require('request');
 
 // we've started you off with Express, 
 // but feel free to use whatever libs or frameworks you'd like through `package.json`.
@@ -21,7 +21,7 @@ app.get("/", function (request, response) {
 app.get("/api/imagesearch/:query", function (request, response) {
   var keyword = request.params["query"];
   var offset = request.query.offset;
-  var search = new Search(process.env.API_KEY);
+  
 });
 
 
