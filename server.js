@@ -13,7 +13,10 @@ var https = require('https');
 //var CX = '007483715269021992219:tsmgvdhde94';
 
 //bing key
-var API_KEY = '0dda7c9705ab4d719af6483232ee92a3';
+//var API_KEY = '0dda7c9705ab4d719af6483232ee92a3';
+var API_KEY = '00b06db20ca642078ab67fc7a4c18834';
+
+var Bing = require('node-bing-api')({ accKey: API_KEY});
 
 // we've started you off with Express, 
 // but feel free to use whatever libs or frameworks you'd like through `package.json`.
@@ -42,21 +45,17 @@ app.get("/imagesearch/:query", function (request, response) {
         }
     };
   
-  var req = https.request(request_params, function(resp){
-  var body = '';
-    resp.on('data', function (d) {
-        body += d;
-    });
-    resp.on('end', function () {
-        body = JSON.stringify(JSON.parse(body), null, '  ');
-        response.end(body);
-    });
-    resp.on('error', function (e) {
-        console.log('Error: ' + e.message);
-      
-    });
+  //var req = https.request(request_params, function(resp){
+  //var body = '';
     
+  Bing.images(keyword, {
+  count: 10,
+  offset: 1
+  }, function(error, res, body){
+    console.log(body);
   });
+    
+  //});
   //req.end();
   
   //req(apiUrl, function (err, resp, body) {
