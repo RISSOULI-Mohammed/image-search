@@ -7,8 +7,12 @@ var app = express();
 
 var req = require('request');
 
-var API_KEY = 'AIzaSyBG5wSjljgM7qNPmsTLtKptf36Cz2WvtwU';
-var CX = '007483715269021992219:tsmgvdhde94';
+//google key
+//var API_KEY = 'AIzaSyBG5wSjljgM7qNPmsTLtKptf36Cz2WvtwU';
+//var CX = '007483715269021992219:tsmgvdhde94';
+
+//bing key
+var API_KEY = '0dda7c9705ab4d719af6483232ee92a3';
 
 // we've started you off with Express, 
 // but feel free to use whatever libs or frameworks you'd like through `package.json`.
@@ -26,7 +30,8 @@ app.get("/imagesearch/:query", function (request, response) {
   var keyword = request.params["query"];
   var offset = request.query.offset;
   //var apiUrl = 'https://www.googleapis.com/customsearch/v1?key=' + API_KEY + '&cx=' + CX + '&q=' + keyword + '&searchType=image' + '&fields=items(link,snippet,image/thumbnailLink,image/contextLink)';
-  var apiUrl = 'https://www.googleapis.com/customsearch/v1?key=' + API_KEY + '&cx=' + keyword + '&searchType=image' + '&fields=items(link,snippet,image/thumbnailLink,image/contextLink)';
+  //var apiUrl = 'https://www.googleapis.com/customsearch/v1?key=' + API_KEY + '&cx=' + keyword + '&searchType=image' + '&fields=items(link,snippet,image/thumbnailLink,image/contextLink)';
+  var apiUrl = 'https://api.cognitive.microsoft.com/bing/v7.0/images';
   req(apiUrl, function (err, resp, body) {
     if (!err && resp.statusCode == 200) {
       var outPutJson = JSON.parse(body);
