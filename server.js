@@ -5,7 +5,7 @@
 var express = require('express');
 var app = express();
 
-//var req = require('request');
+var req = require('request');
 
 var API_KEY = 'AIzaSyBG5wSjljgM7qNPmsTLtKptf36Cz2WvtwU';
 var CX = '007483715269021992219:tsmgvdhde94';
@@ -22,11 +22,17 @@ app.get("/", function (request, response) {
 });
 
 app.get("/imagesearch/:query", function (request, response) {
-  debugger;
+  //debugger;
   var keyword = request.params["query"];
   var offset = request.query.offset;
-  var apiUrl = 'https://www.googleapis.com/customsearch/v1?key=' + API_KEY + '&cx=' + CX + '&q=' + keyword + '&searchType=image' + '&fields=items(link,snippet,image/thumbnailLink,image/contextLink)';
-  response.end(apiUrl);
+  //var apiUrl = 'https://www.googleapis.com/customsearch/v1?key=' + API_KEY + '&cx=' + CX + '&q=' + keyword + '&searchType=image' + '&fields=items(link,snippet,image/thumbnailLink,image/contextLink)';
+  var apiUrl = 'https://www.googleapis.com/customsearch/v1?key=' + API_KEY + '&cx=' + keyword + '&searchType=image' + '&fields=items(link,snippet,image/thumbnailLink,image/contextLink)';
+  req(apiUrl, function (err, resp, body) {
+    if (!err && resp.statusCode == 200) {
+      var outPutJson = JSON.parse(body);
+      response.send(resp);
+    }
+  });
   //response.end("test test")
   
 });
