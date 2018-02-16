@@ -21,12 +21,13 @@ app.get("/", function (request, response) {
   response.sendFile(__dirname + '/views/index.html');
 });
 
-app.get("/api/imagesearch/:query", function (request, response) {
+app.get("/imagesearch/:query", function (request, response) {
+  debugger;
   var keyword = request.params["query"];
   var offset = request.query.offset;
-  //var apiUrl = 'https://www.googleapis.com/customsearch/v1?key=' + API_KEY + '&cx=' + CX + '&q=' + keyword + '&searchType=image' + '&fields=items(link,snippet,image/thumbnailLink,image/contextLink)';
-  //response.end(apiUrl);
-  response.end("test test")
+  var apiUrl = 'https://www.googleapis.com/customsearch/v1?key=' + API_KEY + '&cx=' + CX + '&q=' + keyword + '&searchType=image' + '&fields=items(link,snippet,image/thumbnailLink,image/contextLink)';
+  response.end(apiUrl);
+  //response.end("test test")
   
 });
 
