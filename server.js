@@ -5,7 +5,8 @@
 var express = require('express');
 var app = express();
 
-var req = require('request');
+//var req = require('request');
+var https = require('https');
 
 //google key
 //var API_KEY = 'AIzaSyBG5wSjljgM7qNPmsTLtKptf36Cz2WvtwU';
@@ -31,13 +32,35 @@ app.get("/imagesearch/:query", function (request, response) {
   var offset = request.query.offset;
   //var apiUrl = 'https://www.googleapis.com/customsearch/v1?key=' + API_KEY + '&cx=' + CX + '&q=' + keyword + '&searchType=image' + '&fields=items(link,snippet,image/thumbnailLink,image/contextLink)';
   //var apiUrl = 'https://www.googleapis.com/customsearch/v1?key=' + API_KEY + '&cx=' + keyword + '&searchType=image' + '&fields=items(link,snippet,image/thumbnailLink,image/contextLink)';
-  var apiUrl = 'https://api.cognitive.microsoft.com/bing/v7.0/images';
-  req(apiUrl, function (err, resp, body) {
-    if (!err && resp.statusCode == 200) {
-      var outPutJson = JSON.parse(body);
-      response.send(resp);
-    }
+  
+  var request_params = {
+        method : 'GET',
+        hostname : 'api.cognitive.microsoft.com',
+        path : '/bing/v7.0/images?q=' + encodeURIComponent(keyword),
+        headers : {
+            'Ocp-Apim-Subscription-Key' : API_KEY,
+        }
+    };
+  
+  var req = https.request(request_params, function(resp){
+  var body = '';
+    response.on('data', function (d) {
+        body += d;
+    });
+    response.on('end', function () {
+        body = JSON.stringify(JSON.parse(body), null, '  ');
+        console.log('\nJSON Response:\n');
+        console.log(body);
+    });
   });
+  req.end();
+  
+  //req(apiUrl, function (err, resp, body) {
+  //  if (!err && resp.statusCode == 200) {
+  //    var outPutJson = JSON.parse(body);
+  //    response.send(resp);
+  //  }
+  //});
   //response.end("test test")
   
 });
