@@ -24,9 +24,9 @@ app.get("/", function (request, response) {
 app.get("/api/imagesearch/:query", function (request, response) {
   var keyword = request.params["query"];
   var offset = request.query.offset;
-
-  var apiUrl = 'https://www.googleapis.com/customsearch/v1?key=' + API_KEY + '&cx=' + CX + '&q=' + keyword + '&searchType=image' + '&fields=items(link,snippet,image/thumbnailLink,image/contextLink)';
-  response.send(apiUrl);
+  //var apiUrl = 'https://www.googleapis.com/customsearch/v1?key=' + API_KEY + '&cx=' + CX + '&q=' + keyword + '&searchType=image' + '&fields=items(link,snippet,image/thumbnailLink,image/contextLink)';
+  //response.end(apiUrl);
+  response.end("test test")
   
 });
 
