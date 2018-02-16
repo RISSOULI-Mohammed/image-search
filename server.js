@@ -44,16 +44,20 @@ app.get("/imagesearch/:query", function (request, response) {
   
   var req = https.request(request_params, function(resp){
   var body = '';
-    response.on('data', function (d) {
+    resp.on('data', function (d) {
         body += d;
     });
-    response.on('end', function () {
+    resp.on('end', function () {
         body = JSON.stringify(JSON.parse(body), null, '  ');
-        console.log('\nJSON Response:\n');
-        console.log(body);
+        response.end(body);
     });
+    resp.on('error', function (e) {
+        console.log('Error: ' + e.message);
+      
+    });
+    
   });
-  req.end();
+  //req.end();
   
   //req(apiUrl, function (err, resp, body) {
   //  if (!err && resp.statusCode == 200) {
