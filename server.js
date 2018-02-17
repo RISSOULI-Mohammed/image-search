@@ -57,7 +57,8 @@ app.get("/imagesearch/:query", function(request, response) {
     else {
       var db = dbo.db("image-search");
       var coll = db.collection("query");
-      var doc = {"term": keyword}
+      var when = new Date();
+      var doc = {"term": keyword, "when": when}
       coll.insert(doc, function(err, data) {
               if (err) {
                 throw err;
