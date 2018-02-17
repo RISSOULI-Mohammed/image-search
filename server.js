@@ -31,7 +31,7 @@ app.get("/imagesearch/latest", function(request, response) {
     else {
       var db = dbo.db("image-search");
       var coll = db.collection("query");
-      coll.find({}, {"_id": 0, "term": 1}).toArray(function(err, result) {
+      coll.find({}, {fields:{_id: 0}}).sort( { _id : -1 } ).limit(10).toArray(function(err, result) {
         if (err) {
           throw err;
         }
