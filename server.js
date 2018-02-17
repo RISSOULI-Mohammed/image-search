@@ -6,17 +6,10 @@ var express = require('express');
 var app = express();
 
 var req = require('request');
-var https = require('https');
 
 //google key
 var API_KEY = 'AIzaSyBG5wSjljgM7qNPmsTLtKptf36Cz2WvtwU';
 var CX = '007483715269021992219:tsmgvdhde94';
-
-//bing key
-//var API_KEY = '0dda7c9705ab4d719af6483232ee92a3';
-//var API_KEY = '00b06db20ca642078ab67fc7a4c18834';
-
-var Bing = require('node-bing-api')({ accKey: API_KEY});
 
 // we've started you off with Express, 
 // but feel free to use whatever libs or frameworks you'd like through `package.json`.
@@ -25,53 +18,30 @@ var Bing = require('node-bing-api')({ accKey: API_KEY});
 app.use(express.static('public'));
 
 // http://expressjs.com/en/starter/basic-routing.html
-app.get("/", function (request, response) {
+app.get("/", function(request, response) {
   response.sendFile(__dirname + '/views/index.html');
 });
 
-app.get("/imagesearch/:query", function (request, response) {
-  //debugger;
+app.get("/imagesearch/:query", function(request, response) {
   var keyword = request.params["query"];
-  var offset = request.query.offset;
-  //var apiUrl = 'https://www.googleapis.com/customsearch/v1?key=' + API_KEY + '&cx=' + CX + '&q=' + keyword + '&searchType=image' + '&fields=items(link,snippet,image/thumbnailLink,image/contextLink)';
-  var apiUrl = 'https://www.googleapis.com/customsearch/v1?key=' + API_KEY + '&q=' + keyword + '&searchType=image' + '&fields=items(link,snippet,image/thumbnailLink,image/contextLink)';
-  
-  var request_params = {
-        method : 'GET',
-        hostname : 'api.cognitive.microsoft.com',
-        path : '/bing/v7.0/images?q=' + encodeURIComponent(keyword),
-        headers : {
-            'Ocp-Apim-Subscription-Key' : API_KEY,
-        }
-    };
-  
-  //var req = https.request(request_params, function(resp){
-  //var body = '';
-    
-  //Bing.images(keyword, {
-  //count: 10,
-  //offset: 1
-  //}, function(error, res, body){
-  //  if(error) throw error;
-  //  console.log(body);
-  //});
-    
-  //});
-  //req.end();
-  
-  req(apiUrl, function (err, resp, body) {
-    if(err) throw err;
-    if (!err && resp.statusCode == 200) {
-      var outPutJson = JSON.parse(body);
-      response.send(resp);
-    }
+  var offset = request.query.offset ? request.query.offset : 1;
+
+  var apiUrl = 'https://www.googleapis.com/customsearch/v1?key=' + API_KEY + '&cx=' + CX + '&q=' + keyword + '&searchType=image' + '&fields=items(link,snippet,image/thumbnailLink,image/contextLink)&start=' + offset;
+
+  req.get({
+    "encoding": "utf-8",
+    "method": "GET",
+    "uri": apiUrl,
+    "followRedirect": false
+  }, function(err, res, body) {
+    if (err) throw err;
+    response.end(JSON.stringify(JSON.parse(res.body).items));
   });
-  //response.end("test test")
-  
+
 });
 
 
 // listen for requests :)
-var listener = app.listen(process.env.PORT, function () {
+var listener = app.listen(process.env.PORT, function() {
   console.log('Your app is listening on port ' + listener.address().port);
 });
