@@ -24,7 +24,24 @@ app.get("/", function(request, response) {
 });
 
 app.get("/imagesearch/latest", function(request, response) {
-  response.sendFile(__dirname + '/views/index.html');
+  MongoClient.connect("mongodb://omisimo:omisimo@ds237808.mlab.com:37808/image-search", function(err, dbo) {
+    if (err) {
+      throw err;
+    }
+    else {
+      var db = dbo.db("image-search");
+      var coll = db.collection("query");
+      coll.find({}, {"_id": 0, "term": 1}).toArray(function(err, result) {
+        if (err) {
+          throw err;
+        }
+        else {
+        response.end(JSON.stringify(result));
+        }
+      });
+    }
+  });
+  
 });
 
 app.get("/imagesearch/:query", function(request, response) {
@@ -40,7 +57,7 @@ app.get("/imagesearch/:query", function(request, response) {
     else {
       var db = dbo.db("image-search");
       var coll = db.collection("query");
-      var doc = {"keyword": keyword}
+      var doc = {"term": keyword}
       coll.insert(doc, function(err, data) {
               if (err) {
                 throw err;
