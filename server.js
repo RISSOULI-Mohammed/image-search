@@ -60,12 +60,13 @@ app.get("/imagesearch/:query", function (request, response) {
   //req.end();
   
   req(apiUrl, function (err, resp, body) {
+    if(err) throw err;
     if (!err && resp.statusCode == 200) {
       var outPutJson = JSON.parse(body);
-     response.send(resp);
+      response.send(resp);
     }
   });
-  response.end("test test")
+  //response.end("test test")
   
 });
 
