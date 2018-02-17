@@ -4,8 +4,9 @@
 // init project
 var express = require('express');
 var app = express();
-
 var req = require('request');
+var mongodb = require('mongodb');
+var MongoClient = mongodb.MongoClient;
 
 //google key
 var API_KEY = 'AIzaSyBG5wSjljgM7qNPmsTLtKptf36Cz2WvtwU';
@@ -22,12 +23,32 @@ app.get("/", function(request, response) {
   response.sendFile(__dirname + '/views/index.html');
 });
 
+app.get("/imagesearch/latest", function(request, response) {
+  response.sendFile(__dirname + '/views/index.html');
+});
+
 app.get("/imagesearch/:query", function(request, response) {
   var keyword = request.params["query"];
   var offset = request.query.offset ? request.query.offset : 1;
 
   var apiUrl = 'https://www.googleapis.com/customsearch/v1?key=' + API_KEY + '&cx=' + CX + '&q=' + keyword + '&searchType=image' + '&fields=items(link,snippet,image/thumbnailLink,image/contextLink)&start=' + offset;
-
+  
+  MongoClient.connect("mongodb://omisimo:omisimo@ds237808.mlab.com:37808/image-search", function(err, dbo) {
+    if (err) {
+      throw err;
+    }
+    else {
+      var db = dbo.db("image-search");
+      var coll = db.collection("query");
+      var doc = {"keyword": keyword}
+      coll.insert(doc, function(err, data) {
+              if (err) {
+                throw err;
+              }
+            });
+    }
+  });
+  
   req.get({
     "encoding": "utf-8",
     "method": "GET",
