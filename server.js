@@ -5,16 +5,16 @@
 var express = require('express');
 var app = express();
 
-//var req = require('request');
+var req = require('request');
 var https = require('https');
 
 //google key
-//var API_KEY = 'AIzaSyBG5wSjljgM7qNPmsTLtKptf36Cz2WvtwU';
-//var CX = '007483715269021992219:tsmgvdhde94';
+var API_KEY = 'AIzaSyBG5wSjljgM7qNPmsTLtKptf36Cz2WvtwU';
+var CX = '007483715269021992219:tsmgvdhde94';
 
 //bing key
 //var API_KEY = '0dda7c9705ab4d719af6483232ee92a3';
-var API_KEY = '00b06db20ca642078ab67fc7a4c18834';
+//var API_KEY = '00b06db20ca642078ab67fc7a4c18834';
 
 var Bing = require('node-bing-api')({ accKey: API_KEY});
 
@@ -34,7 +34,7 @@ app.get("/imagesearch/:query", function (request, response) {
   var keyword = request.params["query"];
   var offset = request.query.offset;
   //var apiUrl = 'https://www.googleapis.com/customsearch/v1?key=' + API_KEY + '&cx=' + CX + '&q=' + keyword + '&searchType=image' + '&fields=items(link,snippet,image/thumbnailLink,image/contextLink)';
-  //var apiUrl = 'https://www.googleapis.com/customsearch/v1?key=' + API_KEY + '&cx=' + keyword + '&searchType=image' + '&fields=items(link,snippet,image/thumbnailLink,image/contextLink)';
+  var apiUrl = 'https://www.googleapis.com/customsearch/v1?key=' + API_KEY + '&q=' + keyword + '&searchType=image' + '&fields=items(link,snippet,image/thumbnailLink,image/contextLink)';
   
   var request_params = {
         method : 'GET',
@@ -48,23 +48,24 @@ app.get("/imagesearch/:query", function (request, response) {
   //var req = https.request(request_params, function(resp){
   //var body = '';
     
-  Bing.images(keyword, {
-  count: 10,
-  offset: 1
-  }, function(error, res, body){
-    console.log(body);
-  });
+  //Bing.images(keyword, {
+  //count: 10,
+  //offset: 1
+  //}, function(error, res, body){
+  //  if(error) throw error;
+  //  console.log(body);
+  //});
     
   //});
   //req.end();
   
-  //req(apiUrl, function (err, resp, body) {
-  //  if (!err && resp.statusCode == 200) {
-  //    var outPutJson = JSON.parse(body);
-  //    response.send(resp);
-  //  }
-  //});
-  //response.end("test test")
+  req(apiUrl, function (err, resp, body) {
+    if (!err && resp.statusCode == 200) {
+      var outPutJson = JSON.parse(body);
+     response.send(resp);
+    }
+  });
+  response.end("test test")
   
 });
 
